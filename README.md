@@ -5,6 +5,8 @@ Created by Hosszú Ádám
 
 A demo weather information application using the openweathermap.org API.
 
+---
+
 Functional Requirements:
 * Get User Location
 * Request weather data from OpenWeatherMap API
@@ -21,3 +23,20 @@ Optinal Requriement:
 * Implement "More Details" Fragment
 * Add screen transition
 * Use Kotlin
+
+---
+
+Used Libraries:
+* Kotlin Serializaton
+* GMS Services (FusedLocation)
+* Lifecycle ViewModel
+* Koin (DI)
+* Jetpack Navigation + SafeArgs
+* Room (Local SQL Database)
+* OkHttp3 (HTTP Client)
+* FastAdapter (RecyclerView Helper)
+* Timber (Logging)
+* LeakCanary
+* Detekt (Code Quality)
+* JUnit
+* Robolectric
