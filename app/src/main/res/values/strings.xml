@@ -1,54 +1,9 @@
 <resources>
     <string name="app_name">Something App</string>
 
-    <string name="temperature_is">Temperature:</string>
-    <string name="date_is">Date:</string>
-    <string name="more_details">More Details</string>
-    <string name="unknown">Unknown</string>
-
-    <string name="error_gms_not_available">Error: GMS not available!</string>
+    <string name="error_location_service_not_available">Error: Location Service not available!</string>
     <string name="error_location_not_granted">Error: Location permission not granted!</string>
     <string name="error_cant_start_location_updates">Location permission not granted, can\'t update coordinates!</string>
     <string name="warning_fine_location_not_granted">Precise location permission not granted!</string>
     <string name="close_app">Close App</string>
-    <string name="ok">OK</string>
-    <string name="lat_lon_values">Lat: %s  Lon: %s</string>
-    <string name="error_value">Error: %s</string>
-
-    <string name="coord">coord</string>
-    <string name="lat">Lat</string>
-    <string name="lon">Lon</string>
-    <string name="base">base</string>
-    <string name="main">main</string>
-    <string name="temp">temp</string>
-    <string name="feelsLike">feelsLike</string>
-    <string name="temp_min">temp_min</string>
-    <string name="temp_max">tempMax</string>
-    <string name="pressure">pressure</string>
-    <string name="humidity">humidity</string>
-    <string name="visibility">visibility</string>
-    <string name="wind">wind</string>
-    <string name="speed">speed</string>
-    <string name="deg">deg</string>
-    <string name="gust">gust</string>
-    <string name="vloud">cloud</string>
-    <string name="all">all</string>
-    <string name="rain">rain</string>
-    <string name="one_hour">1h</string>
-    <string name="three_hour">3h</string>
-    <string name="snow">snow</string>
-    <string name="dt">dt</string>
-    <string name="sys">sys</string>
-    <string name="type">type</string>
-    <string name="sysId">sysId</string>
-    <string name="message">message</string>
-    <string name="county">country</string>
-    <string name="sunrise">sunrise</string>
-    <string name="sunset">sunset</string>
-    <string name="timezone">timezone</string>
-    <string name="cityId">cityId</string>
-    <string name="name">name</string>
-    <string name="code">cod</string>
-    <string name="date">date</string>
-    <string name="unit">unit</string>
 </resources>
