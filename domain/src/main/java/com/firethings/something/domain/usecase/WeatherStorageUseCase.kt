@@ -1,7 +1,6 @@
 package com.firethings.something.domain.usecase
 
 import com.firethings.something.domain.model.Weather
-import com.firethings.something.domain.model.WeatherCondition
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherStorageUseCase {

@@ -12,7 +12,7 @@ class WeatherItem(
     val data: Weather
 ) : AbstractBindingItem<ItemWeatherBinding>() {
     override val type: Int = R.id.item_weather
-    override var identifier: Long = data.localId?.toLong()?:0
+    override var identifier: Long = data.localId?.toLong() ?: 0
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): ItemWeatherBinding =
         ItemWeatherBinding.inflate(inflater, parent, false)

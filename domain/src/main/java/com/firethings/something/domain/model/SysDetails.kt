@@ -1,7 +1,5 @@
 package com.firethings.something.domain.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
 import java.util.Date
 
 data class SysDetails(

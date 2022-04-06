@@ -1,8 +1,5 @@
 package com.firethings.something.domain.model
 
-import androidx.room.ColumnInfo
-import com.firethings.something.domain.model.Temperature
-
 data class MainDetails(
     val temp: Temperature? = null,
     val feelsLike: Temperature? = null,

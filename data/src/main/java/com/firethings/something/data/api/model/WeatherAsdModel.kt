@@ -3,7 +3,7 @@ package com.firethings.something.data.api.model
 import com.firethings.something.domain.model.ParameterUnit
 import com.google.gson.annotations.SerializedName
 
-data class WeatherModel(
+data class WeatherAsdModel(
     val coord: CoordinatesModel,
     val weather: List<WeatherConditionModel>? = null,
     val base: String? = null,

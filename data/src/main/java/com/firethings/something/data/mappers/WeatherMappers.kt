@@ -3,7 +3,7 @@ package com.firethings.something.data.mappers
 import com.firethings.something.data.api.model.WeatherModel
 import com.firethings.something.data.local.model.WeatherEntry
 import com.firethings.something.domain.model.Weather
-import java.util.*
+import java.util.Date
 
 fun WeatherModel.toDomain() = Weather(
     localId = null,

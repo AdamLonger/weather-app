@@ -1,20 +1,18 @@
 package com.firethings.something.data.api.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class MainModel(
     val temp: Float? = null,
-    @SerialName("feels_like")
+    @SerializedName("feels_like")
     val feelsLike: Float? = null,
-    @SerialName("temp_min")
+    @SerializedName("temp_min")
     val tempMin: Float? = null,
-    @SerialName("temp_max")
+    @SerializedName("temp_max")
     val tempMax: Float? = null,
-    @SerialName("sea_level")
+    @SerializedName("sea_level")
     val seaLevel: Int? = null,
-    @SerialName("grnd_level")
+    @SerializedName("grnd_level")
     val groundLevel: Int? = null,
     val pressure: Int? = null,
     val humidity: Int? = null,

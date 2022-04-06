@@ -7,7 +7,7 @@ object WeatherItemDiff : DiffCallback<WeatherItem> {
         oldItem.data == newItem.data
 
     override fun areItemsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean =
-        oldItem.data.localId?:0 == newItem.data.localId?:0
+        oldItem.data.localId ?: 0 == newItem.data.localId ?: 0
 
     override fun getChangePayload(
         oldItem: WeatherItem,

@@ -1,8 +1,5 @@
 package com.firethings.something.data.api.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class SysModel(
     val type: Int? = null,
     val id: Int? = null,

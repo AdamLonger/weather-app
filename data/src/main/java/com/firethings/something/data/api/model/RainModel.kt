@@ -1,12 +1,10 @@
 package com.firethings.something.data.api.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class RainModel(
-    @SerialName("1h")
+    @SerializedName("1h")
     val oneHour: Float? = null,
-    @SerialName("3h")
+    @SerializedName("3h")
     val threeHour: Float? = null,
 )
