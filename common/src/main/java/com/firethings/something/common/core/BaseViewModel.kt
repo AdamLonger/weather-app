@@ -24,7 +24,7 @@ abstract class BaseViewModel<Event : Any, Action : Any, Result : Any, State : An
 
     open val onStartActions: List<Action> = emptyList()
 
-    private val actions: Channel<Action> = Channel()
+    protected val actions: Channel<Action> = Channel()
 
     abstract fun Event.toAction(): Action
 

@@ -1,20 +1,24 @@
 package com.firethings.something.weather.adapter
 
+import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.diff.DiffCallback
 
-object WeatherItemDiff : DiffCallback<WeatherItem> {
-    override fun areContentsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean =
-        oldItem.data == newItem.data
+object WeatherItemDiff : DiffCallback<GenericItem> {
+    override fun areContentsTheSame(oldItem: GenericItem, newItem: GenericItem): Boolean = when {
+        oldItem is WeatherItem && newItem is WeatherItem -> oldItem.data == newItem.data
+        oldItem is RefreshingWeatherItem && newItem is RefreshingWeatherItem -> oldItem.data == newItem.data
+        else -> oldItem.identifier == newItem.identifier
+    }
 
-    override fun areItemsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean =
-        oldItem.data.localId ?: 0 == newItem.data.localId ?: 0
+    override fun areItemsTheSame(oldItem: GenericItem, newItem: GenericItem): Boolean =
+        oldItem.identifier == newItem.identifier
 
     override fun getChangePayload(
-        oldItem: WeatherItem,
+        oldItem: GenericItem,
         oldItemPosition: Int,
-        newItem: WeatherItem,
+        newItem: GenericItem,
         newItemPosition: Int
-    ): Any = DummyPayload
+    ): Any = 0
 }
 
-private object DummyPayload
+internal object DummyPayload

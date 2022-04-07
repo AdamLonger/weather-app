@@ -12,14 +12,13 @@ class WeatherItem(
     val data: Weather.Stored
 ) : AbstractBindingItem<ItemWeatherBinding>() {
     override val type: Int = R.id.item_weather
-    override var identifier: Long = data.localId.toLong()
+    override var identifier: Long = data.localId
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): ItemWeatherBinding =
         ItemWeatherBinding.inflate(inflater, parent, false)
 
     override fun bindView(binding: ItemWeatherBinding, payloads: List<Any>) {
         binding.temperature.text = data.main?.temp?.formatted ?: binding.root.context.getString(R.string.unknown)
-
         binding.date.text = Formatters.dateTimeFormat.format(data.date)
     }
 }

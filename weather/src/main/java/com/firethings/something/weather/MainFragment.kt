@@ -19,11 +19,13 @@ import com.firethings.something.presentation.MainViewModel
 import com.firethings.something.presentation.MainViewModel.Action
 import com.firethings.something.presentation.MainViewModel.Event
 import com.firethings.something.presentation.MainViewModel.State
+import com.firethings.something.weather.adapter.RefreshingWeatherItem
 import com.firethings.something.weather.adapter.WeatherItem
 import com.firethings.something.weather.adapter.WeatherItemDiff
 import com.firethings.something.weather.databinding.FragmentMainBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import org.koin.android.ext.android.inject
@@ -36,8 +38,8 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
     override val viewModel: MainViewModel by viewModel()
     private val locationClient: LocationClient by inject()
 
-    private val itemAdapter: ItemAdapter<WeatherItem> = ItemAdapter()
-    private val adapter: FastAdapter<WeatherItem> = FastAdapter.Companion.with(itemAdapter)
+    private val itemAdapter: ItemAdapter<GenericItem> = ItemAdapter()
+    private val adapter: FastAdapter<GenericItem> = FastAdapter.with(itemAdapter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,14 +64,26 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
         )
 
         adapter.onClickListener = { _, _, item, _ ->
-            item.data.localId.let {
-                findNavController().navigate(MainFragmentDirections.showDetails(it))
+            when (item) {
+                is WeatherItem -> item.data.localId.let {
+                    findNavController().navigate(MainFragmentDirections.showDetails(it))
+                }
             }
             true
         }
 
         binding.saveFab.setThrottlingOnClickListener {
             viewModel.sendEvent(Event.SaveWeather)
+        }
+
+        binding.toggleBtn.setThrottlingOnClickListener {
+            viewModel.sendEvent(
+                if (viewModel.state.periodicEnabled) {
+                    Event.StopPeriodicUpdates
+                } else {
+                    Event.StartPeriodicUpdates
+                }
+            )
         }
     }
 
@@ -93,11 +107,14 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
     override fun bindState(state: State) {
         binding.loader.isVisible = state.isLoading
         binding.saveFab.isEnabled = !state.isLoading
+        binding.toggleBtn.isChecked = state.periodicEnabled
         binding.currentLatLon.text = state.location.let {
             String.format(getString(R.string.lat_lon_values), it.lat.toString(), it.lon.toString())
         }
 
-        val contents = state.localData.getOrNull()?.map { WeatherItem(it) } ?: emptyList()
+        val contents = listOfNotNull(state.refreshingData.getOrNull()?.let { RefreshingWeatherItem(10000, it) }) +
+                (state.localData.getOrNull()?.map { WeatherItem(it) } ?: emptyList())
+
         val contentResult = FastAdapterDiffUtil.calculateDiff(itemAdapter, contents, WeatherItemDiff)
         FastAdapterDiffUtil[itemAdapter] = contentResult
 

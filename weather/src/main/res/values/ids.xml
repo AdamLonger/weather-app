@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="item_weather" type="id" />
+    <item name="item_weather_refreshing" type="id" />
     <item name="item_title" type="id" />
     <item name="item_property" type="id" />
 </resources>
