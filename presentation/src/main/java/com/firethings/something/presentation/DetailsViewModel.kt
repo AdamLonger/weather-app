@@ -1,10 +1,10 @@
 package com.firethings.something.presentation
 
 import com.firethings.something.common.core.BaseViewModel
+import com.firethings.something.common.core.Failed
+import com.firethings.something.common.core.Loaded
 import com.firethings.something.common.core.Loading
 import com.firethings.something.common.core.StatePart
-import com.firethings.something.common.core.mutateError
-import com.firethings.something.common.core.mutateLoaded
 import com.firethings.something.domain.model.Weather
 import com.firethings.something.domain.usecase.WeatherStorageUseCase
 import com.firethings.something.presentation.DetailsViewModel.Action
@@ -18,21 +18,25 @@ class DetailsViewModel(
     private val weatherStorageUseCase: WeatherStorageUseCase
 ) : BaseViewModel<Event, Action, Effect, State>() {
     sealed class Event {
+        data class DeleteEntry(val id: Long) : Event()
         data class LoadWeatherData(val id: Long) : Event()
     }
 
     sealed class Action {
+        data class DeleteEntry(val id: Long) : Action()
         data class LoadWeatherData(val id: Long) : Action()
     }
 
     sealed class Effect {
         object Loading : Effect()
+        object DeleteSuccess : Effect()
         data class DataLoadFailed(val throwable: Throwable) : Effect()
         data class DataLoaded(val weather: Weather) : Effect()
     }
 
     data class State(
         val isLoading: Boolean = false,
+        val deleted: Boolean = false,
         val weather: StatePart<Weather, Throwable> = Loading
     )
 
@@ -40,6 +44,7 @@ class DetailsViewModel(
 
     override fun Event.toAction(): Action = when (this) {
         is Event.LoadWeatherData -> Action.LoadWeatherData(id)
+        is Event.DeleteEntry -> Action.DeleteEntry(id)
     }
 
     override fun Action.perform(): Flow<Effect> = when (this) {
@@ -50,11 +55,17 @@ class DetailsViewModel(
             val effect = data?.let { Effect.DataLoaded(it) } ?: Effect.DataLoadFailed(Throwable("No such entry"))
             emit(effect)
         }
+        is Action.DeleteEntry -> flow {
+            emit(Effect.Loading)
+            weatherStorageUseCase.deleteById(id)
+            emit(Effect.DeleteSuccess)
+        }
     }
 
     override fun Effect.toNewState(): State = when (this) {
         Effect.Loading -> state.copy(isLoading = true)
-        is Effect.DataLoadFailed -> state.copy(isLoading = false, weather = state.weather.mutateError(throwable))
-        is Effect.DataLoaded -> state.copy(isLoading = false, weather = state.weather.mutateLoaded(weather))
+        is Effect.DataLoadFailed -> state.copy(isLoading = false, weather = Failed(throwable))
+        is Effect.DataLoaded -> state.copy(isLoading = false, weather = Loaded(weather))
+        Effect.DeleteSuccess -> state.copy(isLoading = false, deleted = true)
     }
 }

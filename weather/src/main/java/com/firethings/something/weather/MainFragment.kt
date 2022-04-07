@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import com.firethings.something.common.Formatters
+import com.firethings.something.common.Formatters.fourDecimalPlaces
 import com.firethings.something.common.LocationClient
 import com.firethings.something.common.core.Failed
 import com.firethings.something.common.core.MVIFragment
@@ -19,7 +21,6 @@ import com.firethings.something.presentation.MainViewModel
 import com.firethings.something.presentation.MainViewModel.Action
 import com.firethings.something.presentation.MainViewModel.Event
 import com.firethings.something.presentation.MainViewModel.State
-import com.firethings.something.weather.adapter.RefreshingWeatherItem
 import com.firethings.something.weather.adapter.WeatherItem
 import com.firethings.something.weather.adapter.WeatherItemDiff
 import com.firethings.something.weather.databinding.FragmentMainBinding
@@ -76,7 +77,7 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
             viewModel.sendEvent(Event.SaveWeather)
         }
 
-        binding.toggleBtn.setThrottlingOnClickListener {
+        binding.headerLayout.refreshTapArea.setThrottlingOnClickListener {
             viewModel.sendEvent(
                 if (viewModel.state.periodicEnabled) {
                     Event.StopPeriodicUpdates
@@ -107,13 +108,26 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
     override fun bindState(state: State) {
         binding.loader.isVisible = state.isLoading
         binding.saveFab.isEnabled = !state.isLoading
-        binding.toggleBtn.isChecked = state.periodicEnabled
-        binding.currentLatLon.text = state.location.let {
-            String.format(getString(R.string.lat_lon_values), it.lat.toString(), it.lon.toString())
+        binding.headerLayout.refreshSwitch.isChecked = state.periodicEnabled
+        binding.headerLayout.latestLatLon.text = state.location.let {
+            String.format(
+                getString(R.string.lat_lon_values),
+                fourDecimalPlaces.format(it.lat), fourDecimalPlaces.format(it.lon)
+            )
         }
 
-        val contents = listOfNotNull(state.refreshingData.getOrNull()?.let { RefreshingWeatherItem(10000, it) }) +
-                (state.localData.getOrNull()?.map { WeatherItem(it) } ?: emptyList())
+        val unknownText = binding.root.context.getString(R.string.unknown)
+        val refreshing = state.refreshingData.getOrNull()
+        binding.refreshingLayout.root.isVisible = refreshing != null
+        binding.refreshingLayout.temperature.text = refreshing?.main?.temp?.formatted ?: unknownText
+        binding.refreshingLayout.date.text =
+            refreshing?.date?.let { Formatters.dateTimeFormat.format(it) } ?: unknownText
+        binding.refreshingLayout.coordinates.text =
+            refreshing?.coordinates?.let { coords ->
+                fourDecimalPlaces.format(coords.lat) + " : " + fourDecimalPlaces.format(coords.lon)
+            } ?: unknownText
+
+        val contents = state.localData.getOrNull()?.map { WeatherItem(it) } ?: emptyList()
 
         val contentResult = FastAdapterDiffUtil.calculateDiff(itemAdapter, contents, WeatherItemDiff)
         FastAdapterDiffUtil[itemAdapter] = contentResult

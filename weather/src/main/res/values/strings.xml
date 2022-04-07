@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="weather_something">Weather Something</string>
     <string name="unknown">Unknown</string>
 
     <string name="ok">OK</string>
-    <string name="lat_lon_values">Lat: %s  Lon: %s</string>
+    <string name="cancel">Cancel</string>
+    <string name="lat_lon_values">Lat: %s\nLon: %s</string>
     <string name="error_value">Error: %s</string>
 
+    <string name="auto_refresh">Auto Refresh</string>
     <string name="coordinates_are">Coordinates:</string>
     <string name="temperature_is">Temperature:</string>
     <string name="date_is">Date:</string>
     <string name="more_details">More Details</string>
+
+    <string name="delete_item_confirmation">Are you sure you want to delete the entry?</string>
 
     <string name="coord">coord</string>
     <string name="lat">Lat</string>

@@ -6,5 +6,6 @@ import java.util.Locale
 
 object Formatters {
     val oneDecimalPlaces = DecimalFormat("#.#")
+    val fourDecimalPlaces = DecimalFormat("#.####")
     val dateTimeFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale("hu", "HU"))
 }

@@ -2,6 +2,7 @@ package com.firethings.something.weather
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -40,12 +41,26 @@ class DetailsFragment : MVIFragment<FragmentDetailsBinding, Event, Action, State
         binding.backBtn.setThrottlingOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.deleteBtn.setThrottlingOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.delete_item_confirmation)
+                .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+                .setPositiveButton(R.string.ok) { dialog, _ ->
+                    viewModel.sendEvent(Event.DeleteEntry(args.weatherId))
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 
     override fun bindState(state: State) {
         binding.loader.isVisible = state.isLoading
 
-        // TODO: Refactor and add units
+        if (state.deleted) {
+            findNavController().popBackStack()
+        }
+
         val contents = state.weather.let { weatherPart ->
             val weather = weatherPart.getOrNull() ?: return@let emptyList()
             listOf(
@@ -89,7 +104,7 @@ class DetailsFragment : MVIFragment<FragmentDetailsBinding, Event, Action, State
                 TitleListItem(getString(R.string.code), weather.cod),
                 TitleListItem(getString(R.string.unit), weather.parameterUnit.parameter),
                 TitleListItem(getString(R.string.date), Formatters.dateTimeFormat.format(weather.date)),
-              )
+            )
         }
 
         val contentResult = FastAdapterDiffUtil.calculateDiff(itemAdapter, contents)

@@ -6,7 +6,6 @@ import com.mikepenz.fastadapter.diff.DiffCallback
 object WeatherItemDiff : DiffCallback<GenericItem> {
     override fun areContentsTheSame(oldItem: GenericItem, newItem: GenericItem): Boolean = when {
         oldItem is WeatherItem && newItem is WeatherItem -> oldItem.data == newItem.data
-        oldItem is RefreshingWeatherItem && newItem is RefreshingWeatherItem -> oldItem.data == newItem.data
         else -> oldItem.identifier == newItem.identifier
     }
 
