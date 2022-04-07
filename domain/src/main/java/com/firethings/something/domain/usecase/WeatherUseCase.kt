@@ -5,5 +5,5 @@ import com.firethings.something.domain.model.ParameterUnit
 import com.firethings.something.domain.model.Weather
 
 interface WeatherUseCase {
-    suspend fun getWeather(location: Coordinates, unit: ParameterUnit = ParameterUnit.METRIC): Weather?
+    suspend fun getWeather(location: Coordinates, unit: ParameterUnit = ParameterUnit.METRIC): Weather.Simple?
 }

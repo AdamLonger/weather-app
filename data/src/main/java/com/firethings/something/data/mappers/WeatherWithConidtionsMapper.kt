@@ -4,9 +4,10 @@ import com.firethings.something.data.api.model.WeatherModel
 import com.firethings.something.data.local.model.WeatherWithConditions
 import com.firethings.something.domain.model.Weather
 
-fun WeatherWithConditions.toDomain() = Weather(
+fun WeatherWithConditions.toDomain() = Weather.Stored(
     localId = weather.id,
     coordinates = weather.coordinates,
+    conditions = weatherCondition.map { it.toDomain() },
     base = weather.base,
     main = weather.main?.toDomain(),
     visibility = weather.visibility,

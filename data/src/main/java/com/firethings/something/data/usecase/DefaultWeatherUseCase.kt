@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 class DefaultWeatherUseCase(
     private val weatherClient: WeatherClient
 ) : WeatherUseCase {
-    override suspend fun getWeather(location: Coordinates, unit: ParameterUnit): Weather? =
+    override suspend fun getWeather(location: Coordinates, unit: ParameterUnit): Weather.Simple? =
         withContext(Dispatchers.IO) {
             weatherClient.getWeather(location, unit)?.toDomain()
         }

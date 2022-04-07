@@ -1,5 +1,6 @@
 package com.firethings.something
 
+import com.firethings.something.common.LocationClient
 import com.firethings.something.data.api.WeatherClient
 import com.firethings.something.data.local.LocalWeatherStorage
 import com.firethings.something.data.usecase.DefaultWeatherStorageUseCase
@@ -15,6 +16,7 @@ import org.koin.dsl.module
 val myModule = module {
     single { WeatherClient() }
     single { LocalWeatherStorage.build(androidContext()) }
+    single<LocationClient> { DefaultLocationClient() }
 
     single<WeatherStorageUseCase> { DefaultWeatherStorageUseCase(get()) }
     single<WeatherUseCase> { DefaultWeatherUseCase(get()) }

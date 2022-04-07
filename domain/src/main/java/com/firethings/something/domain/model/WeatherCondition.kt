@@ -1,10 +1,24 @@
 package com.firethings.something.domain.model
 
-data class WeatherCondition(
-    val localId: Int?,
-    val localParentId: Int?,
-    val apiId: Int? = null,
-    val main: String? = null,
-    val description: String? = null,
-    val icon: String? = null
-)
+sealed class WeatherCondition {
+    abstract val apiId: Int?
+    abstract val main: String?
+    abstract val description: String?
+    abstract val icon: String?
+
+    class Stored(
+        val localId: Int,
+        val localParentId: Int,
+        override val apiId: Int? = null,
+        override val main: String? = null,
+        override val description: String? = null,
+        override val icon: String? = null
+    ) : WeatherCondition()
+
+    class Simple(
+        override val apiId: Int? = null,
+        override val main: String? = null,
+        override val description: String? = null,
+        override val icon: String? = null
+    ) : WeatherCondition()
+}

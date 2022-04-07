@@ -35,13 +35,13 @@ class MainViewModel(
         data class LocationUpdated(val location: Coordinates) : Effect()
         object WeatherLoaded : Effect()
         data class WeatherLoadFailed(val throwable: Throwable) : Effect()
-        data class LocalDataLoaded(val weatherList: List<Weather>) : Effect()
+        data class LocalDataLoaded(val weatherList: List<Weather.Stored>) : Effect()
     }
 
     data class State(
         val isLoading: Boolean = false,
-        val latestData: Weather? = null,
-        val localData: List<Weather> = emptyList(),
+        val latestData: Weather.Simple? = null,
+        val localData: List<Weather.Stored> = emptyList(),
         val error: Throwable? = null,
         val location: Coordinates = Coordinates()
     )

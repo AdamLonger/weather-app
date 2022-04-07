@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.map
 class DefaultWeatherStorageUseCase(
     private val storage: LocalWeatherStorage
 ) : WeatherStorageUseCase {
-    override fun weatherFlow(): Flow<List<Weather>> = storage.weatherDao().weatherFlow().map { list ->
+    override fun weatherFlow(): Flow<List<Weather.Stored>> = storage.weatherDao().weatherFlow().map { list ->
         list.map { data -> data.toDomain() }
     }
 
-    override suspend fun weatherById(id: Int): Weather? = storage.weatherDao().weatherById(id)?.toDomain()
+    override suspend fun weatherById(id: Int): Weather.Stored? = storage.weatherDao().weatherById(id)?.toDomain()
 
     override suspend fun insertWeatherAndConditions(weather: Weather) =
         storage.weatherDao().insertEntryWithConditions(weather.getBaseEntry(), weather.getConditionEntryList())

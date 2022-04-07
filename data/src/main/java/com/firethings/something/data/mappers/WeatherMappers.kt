@@ -5,8 +5,7 @@ import com.firethings.something.data.local.model.WeatherEntry
 import com.firethings.something.domain.model.Weather
 import java.util.Date
 
-fun WeatherModel.toDomain() = Weather(
-    localId = null,
+fun WeatherModel.toDomain() = Weather.Simple(
     coordinates = coord.toDomain(),
     conditions = weather?.map { it.toDomain() } ?: emptyList(),
     base = base,
@@ -27,7 +26,7 @@ fun WeatherModel.toDomain() = Weather(
 )
 
 fun Weather.getBaseEntry() = WeatherEntry(
-    id = localId ?: 0,
+    id = if (this is Weather.Stored) this.localId else 0,
     coordinates = coordinates,
     base = base,
     main = main?.toEntry(),

@@ -9,10 +9,10 @@ import com.firethings.something.weather.databinding.ItemWeatherBinding
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 
 class WeatherItem(
-    val data: Weather
+    val data: Weather.Stored
 ) : AbstractBindingItem<ItemWeatherBinding>() {
     override val type: Int = R.id.item_weather
-    override var identifier: Long = data.localId?.toLong() ?: 0
+    override var identifier: Long = data.localId.toLong()
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): ItemWeatherBinding =
         ItemWeatherBinding.inflate(inflater, parent, false)
