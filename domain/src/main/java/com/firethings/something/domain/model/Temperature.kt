@@ -40,9 +40,9 @@ sealed class Temperature {
         }
 
         fun fromValueAndUnit(value: Float, unit: ParameterUnit) = when (unit) {
-            ParameterUnit.DEFAULT -> Kelvin(value)
-            ParameterUnit.METRIC -> Celsius(value)
-            ParameterUnit.IMPERIAL -> Fahrenheit(value)
+            ParameterUnit.Default -> Kelvin(value)
+            ParameterUnit.Metric -> Celsius(value)
+            ParameterUnit.Imperial -> Fahrenheit(value)
         }
     }
 }

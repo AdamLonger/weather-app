@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherStorageUseCase {
     fun weatherFlow(): Flow<List<Weather.Stored>>
-    suspend fun weatherById(id: Int): Weather.Stored?
+    suspend fun weatherById(id: Long): Weather.Stored?
     suspend fun insertWeatherAndConditions(weather: Weather)
-    suspend fun deleteById(id: Int)
+    suspend fun deleteById(id: Long)
 }

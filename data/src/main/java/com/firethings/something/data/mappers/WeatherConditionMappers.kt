@@ -7,21 +7,20 @@ import com.firethings.something.domain.model.WeatherCondition
 fun WeatherConditionEntry.toDomain() = WeatherCondition.Stored(
     localId = id,
     localParentId = parentId,
-    apiId = id,
+    apiId = apiId,
     main = main,
     description = description,
     icon = icon
 )
 
 fun WeatherConditionModel.toDomain() = WeatherCondition.Simple(
-    apiId = id,
     main = main,
     description = description,
     icon = icon
 )
 
 fun WeatherConditionModel.toEntry() = WeatherConditionEntry(
-    apiId = id,
+    id = id,
     main = main,
     description = description,
     icon = icon

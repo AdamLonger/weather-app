@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import kotlinx.coroutines.launch
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -19,7 +20,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                 .isGooglePlayServicesAvailable(requireContext()) != ConnectionResult.SUCCESS
         ) {
             AlertDialog.Builder(requireContext())
-               .setMessage(R.string.error_location_service_not_available)
+                .setMessage(R.string.error_location_service_not_available)
                 .setNeutralButton(R.string.close_app) { _, _ -> activity?.finishAffinity() }
                 .show()
         } else requestOrHandleLocationPermission()

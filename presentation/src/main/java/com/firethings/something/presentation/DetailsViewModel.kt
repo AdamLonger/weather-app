@@ -1,6 +1,10 @@
 package com.firethings.something.presentation
 
 import com.firethings.something.common.core.BaseViewModel
+import com.firethings.something.common.core.Loading
+import com.firethings.something.common.core.StatePart
+import com.firethings.something.common.core.mutateError
+import com.firethings.something.common.core.mutateLoaded
 import com.firethings.something.domain.model.Weather
 import com.firethings.something.domain.usecase.WeatherStorageUseCase
 import com.firethings.something.presentation.DetailsViewModel.Action
@@ -14,11 +18,11 @@ class DetailsViewModel(
     private val weatherStorageUseCase: WeatherStorageUseCase
 ) : BaseViewModel<Event, Action, Effect, State>() {
     sealed class Event {
-        data class LoadWeatherData(val id: Int) : Event()
+        data class LoadWeatherData(val id: Long) : Event()
     }
 
     sealed class Action {
-        data class LoadWeatherData(val id: Int) : Action()
+        data class LoadWeatherData(val id: Long) : Action()
     }
 
     sealed class Effect {
@@ -29,8 +33,7 @@ class DetailsViewModel(
 
     data class State(
         val isLoading: Boolean = false,
-        val weather: Weather? = null,
-        val error: Throwable? = null,
+        val weather: StatePart<Weather, Throwable> = Loading
     )
 
     override val initialState: State = State()
@@ -51,7 +54,7 @@ class DetailsViewModel(
 
     override fun Effect.toNewState(): State = when (this) {
         Effect.Loading -> state.copy(isLoading = true)
-        is Effect.DataLoadFailed -> state.copy(isLoading = false, error = throwable, weather = null)
-        is Effect.DataLoaded -> state.copy(isLoading = false, error = null, weather = weather)
+        is Effect.DataLoadFailed -> state.copy(isLoading = false, weather = state.weather.mutateError(throwable))
+        is Effect.DataLoaded -> state.copy(isLoading = false, weather = state.weather.mutateLoaded(weather))
     }
 }

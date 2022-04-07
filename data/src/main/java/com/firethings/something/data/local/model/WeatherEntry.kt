@@ -10,7 +10,7 @@ import java.util.Date
 @Entity(tableName = "weather_table")
 data class WeatherEntry(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     @Embedded
     val coordinates: Coordinates,
     val base: String? = null,

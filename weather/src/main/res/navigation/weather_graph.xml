@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_details">
         <argument
             android:name="weatherId"
-            app:argType="integer"
+            app:argType="long"
             app:nullable="false" />
     </fragment>
 </navigation>

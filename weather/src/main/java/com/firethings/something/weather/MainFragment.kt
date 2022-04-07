@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.firethings.something.common.LocationClient
+import com.firethings.something.common.core.Failed
 import com.firethings.something.common.core.MVIFragment
 import com.firethings.something.common.setThrottlingOnClickListener
 import com.firethings.something.domain.model.Coordinates
@@ -68,13 +69,13 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
         }
 
         binding.saveFab.setThrottlingOnClickListener {
-            viewModel.sendEvent(Event.LoadWeather)
+            viewModel.sendEvent(Event.SaveWeather)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        checkLocationEnabled(requireContext()){
+        checkLocationEnabled(requireContext()) {
             locationClient.startLocationUpdates()
         }
     }
@@ -96,14 +97,14 @@ class MainFragment : MVIFragment<FragmentMainBinding, Event, Action, State>(
             String.format(getString(R.string.lat_lon_values), it.lat.toString(), it.lon.toString())
         }
 
-        val contents = state.localData.map { WeatherItem(it) }
+        val contents = state.localData.getOrNull()?.map { WeatherItem(it) } ?: emptyList()
         val contentResult = FastAdapterDiffUtil.calculateDiff(itemAdapter, contents, WeatherItemDiff)
         FastAdapterDiffUtil[itemAdapter] = contentResult
 
-        if (state.error != null) {
+        (state.localData as? Failed<*, Throwable>)?.let { failed ->
             Toast.makeText(
                 context,
-                String.format(getString(R.string.error_value), state.error?.localizedMessage), Toast.LENGTH_LONG
+                String.format(getString(R.string.error_value), failed.error.localizedMessage), Toast.LENGTH_LONG
             ).show()
         }
     }

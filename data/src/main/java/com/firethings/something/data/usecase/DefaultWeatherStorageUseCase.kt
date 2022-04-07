@@ -16,10 +16,10 @@ class DefaultWeatherStorageUseCase(
         list.map { data -> data.toDomain() }
     }
 
-    override suspend fun weatherById(id: Int): Weather.Stored? = storage.weatherDao().weatherById(id)?.toDomain()
+    override suspend fun weatherById(id: Long): Weather.Stored? = storage.weatherDao().weatherById(id)?.toDomain()
 
     override suspend fun insertWeatherAndConditions(weather: Weather) =
         storage.weatherDao().insertEntryWithConditions(weather.getBaseEntry(), weather.getConditionEntryList())
 
-    override suspend fun deleteById(id: Int) = storage.weatherDao().deleteWeatherAndConditionsById(id)
+    override suspend fun deleteById(id: Long) = storage.weatherDao().deleteWeatherAndConditionsById(id)
 }

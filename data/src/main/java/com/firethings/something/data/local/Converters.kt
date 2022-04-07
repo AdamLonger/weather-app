@@ -18,12 +18,12 @@ class Converters {
 
     @TypeConverter
     fun fromParameterUnitString(value: String?): ParameterUnit? {
-        return value?.let { ParameterUnit.valueOf(it) }
+        return value?.let { ParameterUnit.fromParameter(it) }
     }
 
     @TypeConverter
-    fun parameterUnitToString(parameter: ParameterUnit?): String? {
-        return parameter?.name
+    fun parameterUnitToString(unit: ParameterUnit?): String? {
+        return unit?.parameter
     }
 
     @TypeConverter

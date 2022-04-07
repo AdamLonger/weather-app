@@ -7,8 +7,8 @@ sealed class WeatherCondition {
     abstract val icon: String?
 
     class Stored(
-        val localId: Int,
-        val localParentId: Int,
+        val localId: Long,
+        val localParentId: Long,
         override val apiId: Int? = null,
         override val main: String? = null,
         override val description: String? = null,

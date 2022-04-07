@@ -2,7 +2,6 @@ package com.firethings.something.weather
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -47,7 +46,8 @@ class DetailsFragment : MVIFragment<FragmentDetailsBinding, Event, Action, State
         binding.loader.isVisible = state.isLoading
 
         // TODO: Refactor and add units
-        val contents = state.weather?.let { weather ->
+        val contents = state.weather.let { weatherPart ->
+            val weather = weatherPart.getOrNull() ?: return@let emptyList()
             listOf(
                 TitleListItem(getString(R.string.coord)),
                 PropertyListItem(getString(R.string.lat), weather.coordinates.lat),
@@ -87,19 +87,12 @@ class DetailsFragment : MVIFragment<FragmentDetailsBinding, Event, Action, State
                 TitleListItem(getString(R.string.cityId), weather.cityId),
                 TitleListItem(getString(R.string.name), weather.name),
                 TitleListItem(getString(R.string.code), weather.cod),
-                TitleListItem(getString(R.string.unit), weather.parameterUnit.name),
+                TitleListItem(getString(R.string.unit), weather.parameterUnit.parameter),
                 TitleListItem(getString(R.string.date), Formatters.dateTimeFormat.format(weather.date)),
               )
-        } ?: emptyList<GenericItem>()
+        }
 
         val contentResult = FastAdapterDiffUtil.calculateDiff(itemAdapter, contents)
         FastAdapterDiffUtil[itemAdapter] = contentResult
-
-        if (state.error != null) {
-            Toast.makeText(
-                context,
-                String.format(getString(R.string.error_value), state.error?.localizedMessage), Toast.LENGTH_LONG
-            ).show()
-        }
     }
 }

@@ -22,7 +22,7 @@ sealed class Weather {
     abstract val parameterUnit: ParameterUnit
 
     data class Stored(
-        val localId: Int,
+        val localId: Long,
         override val coordinates: Coordinates,
         override val base: String? = null,
         override val main: MainDetails? = null,

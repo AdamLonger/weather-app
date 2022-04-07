@@ -22,5 +22,5 @@ data class WeatherAsdModel(
     val cod: Int? = null,
     val timestamp: Long = 0,
     @Transient
-    val parameterUnit: ParameterUnit = ParameterUnit.DEFAULT
+    val parameterUnit: ParameterUnit = ParameterUnit.Metric
 )
