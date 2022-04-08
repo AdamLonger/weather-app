@@ -99,7 +99,7 @@ class MainViewModel(
         }
         Action.StartPeriodicUpdates -> flow {
             if (refreshingJob != null) return@flow
-            refreshingJob = viewModelScope.launch {
+            refreshingJob = internalScope.launch {
                 flow<Action> {
                     while (true) {
                         emit(Action.UpdatePeriodicData)

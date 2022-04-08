@@ -49,8 +49,11 @@ class DetailsFragment : MVIFragment<FragmentDetailsBinding, Event, Action, State
                 .setPositiveButton(R.string.ok) { dialog, _ ->
                     viewModel.sendEvent(Event.DeleteEntry(args.weatherId))
                     dialog.dismiss()
-                }
-                .show()
+                }.show()
+        }
+
+        binding.editBtn.setThrottlingOnClickListener {
+            findNavController().navigate(DetailsFragmentDirections.showEditor(args.weatherId))
         }
     }
 

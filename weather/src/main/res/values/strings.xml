@@ -15,6 +15,12 @@
     <string name="more_details">More Details</string>
 
     <string name="delete_item_confirmation">Are you sure you want to delete the entry?</string>
+    <string name="update_item_confirmation">Are you sure you want to update the entry?</string>
+    <string name="error_invalid_input">Invalid Input!</string>
+
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="temperature">Temperature</string>
 
     <string name="coord">coord</string>
     <string name="lat">Lat</string>

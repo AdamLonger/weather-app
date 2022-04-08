@@ -2,6 +2,7 @@ package com.firethings.something.common.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,9 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<Event : Any, Action : Any, Result : Any, State : Any> : ViewModel() {
+abstract class BaseViewModel<Event : Any, Action : Any, Result : Any, State : Any>(
+    scope: CoroutineScope? = null
+) : ViewModel() {
 
     abstract val initialState: State
     private val internalStateFlow: MutableStateFlow<State> by lazy { MutableStateFlow(initialState) }
@@ -21,6 +24,8 @@ abstract class BaseViewModel<Event : Any, Action : Any, Result : Any, State : An
 
     val state: State
         get() = internalStateFlow.value
+
+    protected val internalScope: CoroutineScope = scope ?: viewModelScope
 
     open val onStartActions: List<Action> = emptyList()
 
@@ -37,13 +42,13 @@ abstract class BaseViewModel<Event : Any, Action : Any, Result : Any, State : An
     }
 
     fun sendEvent(event: Event) {
-        viewModelScope.launch {
+        internalScope.launch {
             actions.send(event.toAction())
         }
     }
 
     private fun startEventsProcessing() {
-        viewModelScope.launch {
+        internalScope.launch {
             actions.consumeAsFlow().onStart {
                 onStartActions.forEach { emit(it) }
             }.collect { action ->

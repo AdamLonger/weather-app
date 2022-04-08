@@ -10,8 +10,10 @@
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.17962962962962964" />
         <entry key="app/src/main/res/layout/item_weather.xml" value="0.335" />
         <entry key="resources/src/main/res/drawable/divider_space.xml" value="0.122" />
+        <entry key="resources/src/main/res/drawable/ic_check.xml" value="0.157" />
         <entry key="resources/src/main/res/drawable/ic_chevron_left.xml" value="0.119" />
         <entry key="weather/src/main/res/layout/fragment_details.xml" value="0.18518518518518517" />
+        <entry key="weather/src/main/res/layout/fragment_editor.xml" value="0.25" />
         <entry key="weather/src/main/res/layout/fragment_main.xml" value="0.25" />
         <entry key="weather/src/main/res/layout/item_title.xml" value="0.17962962962962964" />
         <entry key="weather/src/main/res/layout/item_weather.xml" value="0.17962962962962964" />

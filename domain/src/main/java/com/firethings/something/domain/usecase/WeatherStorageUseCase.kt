@@ -7,5 +7,6 @@ interface WeatherStorageUseCase {
     fun weatherFlow(): Flow<List<Weather.Stored>>
     suspend fun weatherById(id: Long): Weather.Stored?
     suspend fun insertWeatherAndConditions(weather: Weather)
+    suspend fun updateWeather(weather: Weather)
     suspend fun deleteById(id: Long)
 }

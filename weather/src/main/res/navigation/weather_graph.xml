@@ -15,14 +15,31 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/DetailsFragment"
         android:name="com.firethings.something.weather.DetailsFragment"
         tools:layout="@layout/fragment_details">
+        <argument
+            android:name="weatherId"
+            app:argType="long"
+            app:nullable="false" />
+
+        <action
+            android:id="@+id/showEditor"
+            app:destination="@id/EditorFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/EditorFragment"
+        android:name="com.firethings.something.weather.EditorFragment"
+        tools:layout="@layout/fragment_editor">
         <argument
             android:name="weatherId"
             app:argType="long"

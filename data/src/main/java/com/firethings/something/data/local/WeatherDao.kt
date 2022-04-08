@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.firethings.something.data.local.model.WeatherConditionEntry
 import com.firethings.something.data.local.model.WeatherEntry
 import com.firethings.something.data.local.model.WeatherWithConditions
@@ -20,6 +21,9 @@ interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEntry(entry: WeatherEntry): Long
+
+    @Update
+    suspend fun updateEntry(entry: WeatherEntry): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertConditionEntry(entry: WeatherConditionEntry): Long

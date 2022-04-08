@@ -8,6 +8,7 @@ import com.firethings.something.data.usecase.DefaultWeatherUseCase
 import com.firethings.something.domain.usecase.WeatherStorageUseCase
 import com.firethings.something.domain.usecase.WeatherUseCase
 import com.firethings.something.presentation.DetailsViewModel
+import com.firethings.something.presentation.EditorViewModel
 import com.firethings.something.presentation.MainViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,4 +24,5 @@ val myModule = module {
 
     viewModel { MainViewModel(get(), get()) }
     viewModel { DetailsViewModel(get()) }
+    viewModel { EditorViewModel(get()) }
 }
