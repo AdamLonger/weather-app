@@ -1,13 +1,11 @@
 package com.firethings.something.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.firethings.something.common.core.BaseViewModel
+import com.firethings.something.common.core.Dispatchers
 import com.firethings.something.common.core.Failed
 import com.firethings.something.common.core.Loaded
 import com.firethings.something.common.core.Loading
 import com.firethings.something.common.core.StatePart
-import com.firethings.something.common.core.mutateError
-import com.firethings.something.common.core.mutateLoaded
 import com.firethings.something.domain.model.Coordinates
 import com.firethings.something.domain.model.Weather
 import com.firethings.something.domain.usecase.WeatherStorageUseCase
@@ -28,8 +26,9 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val weatherUseCase: WeatherUseCase,
-    private val weatherStorageUseCase: WeatherStorageUseCase
-) : BaseViewModel<Event, Action, Effect, State>() {
+    private val weatherStorageUseCase: WeatherStorageUseCase,
+    dispatchers: Dispatchers
+) : BaseViewModel<Event, Action, Effect, State>(dispatchers) {
     sealed class Event {
         object SaveWeather : Event()
         data class LocationUpdated(val location: Coordinates) : Event()
@@ -41,7 +40,6 @@ class MainViewModel(
         object SaveWeather : Action()
         object LoadLocalData : Action()
         data class LocationUpdated(val location: Coordinates) : Action()
-
         object StartPeriodicUpdates : Action()
         object StopPeriodicUpdates : Action()
         object UpdatePeriodicData : Action()
@@ -127,12 +125,12 @@ class MainViewModel(
     override fun Effect.toNewState(): State = when (this) {
         Effect.Loading -> state.copy(isLoading = true)
         is Effect.WeatherSaveFailed -> state.copy(
-            isLoading = false, localData = state.localData.mutateError(throwable)
+            isLoading = false, localData = Failed(throwable)
         )
         is Effect.WeatherSaved -> state.copy(isLoading = false)
         is Effect.LocationUpdated -> state.copy(location = location)
         is Effect.LocalDataLoaded -> state.copy(
-            isLoading = false, localData = state.localData.mutateLoaded(weatherList)
+            isLoading = false, localData = Loaded(weatherList)
         )
         is Effect.PeriodicUpdateFailed -> state.copy(refreshingData = Failed(throwable))
         is Effect.PeriodicUpdateSuccess -> state.copy(refreshingData = Loaded(weather))

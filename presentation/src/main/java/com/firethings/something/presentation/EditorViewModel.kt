@@ -1,6 +1,7 @@
 package com.firethings.something.presentation
 
 import com.firethings.something.common.core.BaseViewModel
+import com.firethings.something.common.core.Dispatchers
 import com.firethings.something.common.core.Failed
 import com.firethings.something.common.core.Loaded
 import com.firethings.something.common.core.Loading
@@ -19,8 +20,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class EditorViewModel(
-    private val weatherStorageUseCase: WeatherStorageUseCase
-) : BaseViewModel<Event, Action, Effect, State>() {
+    private val weatherStorageUseCase: WeatherStorageUseCase,
+    dispatchers: Dispatchers
+) : BaseViewModel<Event, Action, Effect, State>(dispatchers) {
     sealed class Event {
         object SaveUpdates : Event()
         data class LoadWeatherData(val id: Long) : Event()

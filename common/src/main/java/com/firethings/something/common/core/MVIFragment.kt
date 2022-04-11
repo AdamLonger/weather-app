@@ -20,6 +20,7 @@ abstract class MVIFragment<VB : ViewBinding, E : Any, A : Any, S : Any>(
                 bindState(it)
             }
         }
+        viewModel.onStart()
     }
 
     override fun onStop() {

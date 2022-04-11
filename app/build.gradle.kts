@@ -40,7 +40,6 @@ android {
     productFlavors {
         create("qa") {
             dimension = "default"
-            minSdk = 16
         }
     }
 

@@ -1,5 +1,6 @@
 package com.firethings.something.data.api
 
+import com.firethings.something.data.BuildConfig
 import com.firethings.something.data.api.model.WeatherModel
 import com.firethings.something.domain.model.Coordinates
 import com.firethings.something.domain.model.ParameterUnit
@@ -19,12 +20,11 @@ class WeatherClient {
     }
 
     suspend fun getWeather(location: Coordinates, unit: ParameterUnit = ParameterUnit.Metric): WeatherModel? {
-        val result = service.getWeather(location.lat, location.lon, unit.parameter, API_KEY)
+        val result = service.getWeather(location.lat, location.lon, unit.parameter, BuildConfig.OPEN_WEATHER_KEY)
         return result.body()?.copy(parameterUnit = unit, timestamp = result.raw().receivedResponseAtMillis())
     }
 
     companion object {
         private const val WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/"
-        private const val API_KEY = "092580b329ab6b32ae4aabc5b86ba0af"
     }
 }

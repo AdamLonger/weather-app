@@ -1,6 +1,8 @@
 package com.firethings.something
 
 import com.firethings.something.common.LocationClient
+import com.firethings.something.common.core.DefaultDispatchers
+import com.firethings.something.common.core.Dispatchers
 import com.firethings.something.data.api.WeatherClient
 import com.firethings.something.data.local.LocalWeatherStorage
 import com.firethings.something.data.usecase.DefaultWeatherStorageUseCase
@@ -19,10 +21,11 @@ val myModule = module {
     single { LocalWeatherStorage.build(androidContext()) }
     single<LocationClient> { DefaultLocationClient() }
 
+    single<Dispatchers> { DefaultDispatchers() }
     single<WeatherStorageUseCase> { DefaultWeatherStorageUseCase(get()) }
     single<WeatherUseCase> { DefaultWeatherUseCase(get()) }
 
-    viewModel { MainViewModel(get(), get()) }
-    viewModel { DetailsViewModel(get()) }
-    viewModel { EditorViewModel(get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
+    viewModel { DetailsViewModel(get(), get()) }
+    viewModel { EditorViewModel(get(), get()) }
 }
