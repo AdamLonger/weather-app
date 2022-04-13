@@ -17,11 +17,14 @@ Non-Functional Requirements:
 * Code quality, readability and consistent code style
 * Best UI practices (Material design)
 * Local data storage
-* TODO Unit test (JUnit/Robolectric)
+* Unit test (JUnit/Robolectric) -> ViewModel Test
 
 Optinal Requriement:
-* Implement "More Details" Fragment
-* Add screen transition
+* Add "More Details" Fragment
+* Add Screen transition
+* Implement Periodic updates
+* Create ContentProvider
+* Implement CRUD operations
 * Use Kotlin
 
 ---
@@ -33,10 +36,10 @@ Used Libraries:
 * Koin (DI)
 * Jetpack Navigation + SafeArgs
 * Room (Local SQL Database)
-* OkHttp3 (HTTP Client)
+* Retrofit2 (HTTP Client)
 * FastAdapter (RecyclerView Helper)
 * Timber (Logging)
 * LeakCanary
 * Detekt (Code Quality)
 * JUnit
-* Robolectric
+* KOtlin Coroutines Test
