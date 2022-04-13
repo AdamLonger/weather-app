@@ -9,10 +9,10 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 
 @ExperimentalCoroutinesApi
-fun <S : Any, E : Any, VM : BaseViewModel<E, *, *, S>> runEventTest(
+fun <S : Any, E : Any, VM : BaseViewModel<E, *, *, S>> runSimpleTest(
     viewModel: VM,
     testScope: TestScope,
-    events: List<E>,
+    runEvents: (TestScope) -> Unit,
     assert: (List<S>) -> Unit
 ) = runTest {
     val newStates: MutableList<S> = mutableListOf()
@@ -21,10 +21,27 @@ fun <S : Any, E : Any, VM : BaseViewModel<E, *, *, S>> runEventTest(
     }
 
     viewModel.onStart()
-    events.forEach { viewModel.sendEvent(it) }
-    testScope.advanceUntilIdle()
+
+    runEvents(testScope)
 
     collectJob.cancel()
 
     assert(newStates)
 }
+
+@ExperimentalCoroutinesApi
+fun <S : Any, E : Any, VM : BaseViewModel<E, *, *, S>> runEventTest(
+    viewModel: VM,
+    testScope: TestScope,
+    events: List<E>,
+    assert: (List<S>) -> Unit
+) = runSimpleTest(
+    viewModel,
+    testScope,
+    runEvents = { eventTestScope ->
+        testScope.advanceUntilIdle()
+        events.forEach { viewModel.sendEvent(it) }
+        eventTestScope.advanceUntilIdle()
+    },
+    assert
+)

@@ -6,6 +6,7 @@ import com.firethings.something.common.core.Failed
 import com.firethings.something.common.core.Loaded
 import com.firethings.something.common.core.Loading
 import com.firethings.something.common.core.StatePart
+import com.firethings.something.common.throttleFirst
 import com.firethings.something.domain.model.Coordinates
 import com.firethings.something.domain.model.Weather
 import com.firethings.something.domain.usecase.WeatherStorageUseCase
@@ -15,12 +16,12 @@ import com.firethings.something.presentation.MainViewModel.Effect
 import com.firethings.something.presentation.MainViewModel.Event
 import com.firethings.something.presentation.MainViewModel.State
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,7 @@ class MainViewModel(
         data class LocationUpdated(val location: Coordinates) : Action()
         object StartPeriodicUpdates : Action()
         object StopPeriodicUpdates : Action()
-        object UpdatePeriodicData : Action()
+        data class UpdatePeriodicData(val location: Coordinates) : Action()
     }
 
     sealed class Effect {
@@ -71,6 +72,8 @@ class MainViewModel(
 
     private var refreshingJob: Job? = null
 
+    private var periodicFlow: MutableStateFlow<Coordinates> = MutableStateFlow(Coordinates())
+
     override fun Event.toAction(): Action = when (this) {
         Event.SaveWeather -> Action.SaveWeather
         is Event.LocationUpdated -> Action.LocationUpdated(location)
@@ -91,20 +94,18 @@ class MainViewModel(
         }.catch { throwable ->
             emit(Effect.WeatherSaveFailed(throwable))
         }
-        is Action.LocationUpdated -> flowOf(Effect.LocationUpdated(location))
+        is Action.LocationUpdated -> flow {
+            periodicFlow.value = location
+            emit(Effect.LocationUpdated(location))
+        }
         Action.LoadLocalData -> weatherStorageUseCase.weatherFlow().map { entity ->
             Effect.LocalDataLoaded(entity)
         }
         Action.StartPeriodicUpdates -> flow {
             if (refreshingJob != null) return@flow
             refreshingJob = internalScope.launch {
-                flow<Action> {
-                    while (true) {
-                        emit(Action.UpdatePeriodicData)
-                        delay(REFRESH_PERIOD)
-                    }
-                }.cancellable().collect { action ->
-                    actions.send(action)
+                periodicFlow.throttleFirst(REFRESH_PERIOD).distinctUntilChanged().collect {
+                    actions.send(Action.UpdatePeriodicData(it))
                 }
             }
             emit(Effect.PeriodicUpdateChanged(true))
@@ -114,8 +115,8 @@ class MainViewModel(
             refreshingJob = null
             emit(Effect.PeriodicUpdateChanged(false))
         }
-        Action.UpdatePeriodicData -> flow<Effect> {
-            val data = weatherUseCase.getWeather(state.location)
+        is Action.UpdatePeriodicData -> flow<Effect> {
+            val data = weatherUseCase.getWeather(location)
             emit(Effect.PeriodicUpdateSuccess(data))
         }.catch { throwable ->
             emit(Effect.PeriodicUpdateFailed(throwable))

@@ -52,6 +52,6 @@ class DefaultLocationClient : LocationClient {
     companion object {
         private const val FUSE_INTERVAL = 100L
         private const val FUSE_FAST_INTERVAL = 50L
-        private const val FUSE_MAX_WAIT = 100L
+        private const val FUSE_MAX_WAIT = 3000L
     }
 }

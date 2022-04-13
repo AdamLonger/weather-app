@@ -3,6 +3,8 @@ package com.firethings.something.presentation
 import com.firethings.something.domain.model.Coordinates
 import com.firethings.something.domain.usecase.WeatherStorageUseCase
 import com.firethings.something.domain.usecase.WeatherUseCase
+import com.firethings.something.presentation.MainViewModel.Event
+import com.firethings.something.presentation.MainViewModel.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -50,9 +52,9 @@ class MainViewModelTest : KoinTest {
     fun `Save weather`() = runEventTest(
         viewModel,
         testScope,
-        listOf(MainViewModel.Event.SaveWeather)
+        listOf(Event.SaveWeather)
     ) { newStates ->
-        val latest: MainViewModel.State = newStates.last()
+        val latest: State = newStates.last()
         assert(!latest.isLoading)
     }
 
@@ -60,9 +62,9 @@ class MainViewModelTest : KoinTest {
     fun `Start periodic updates`() = runEventTest(
         viewModel,
         testScope,
-        listOf(MainViewModel.Event.StartPeriodicUpdates)
+        listOf(Event.StartPeriodicUpdates)
     ) { newStates ->
-        val latest: MainViewModel.State = newStates.last()
+        val latest: State = newStates.last()
         assert(!latest.isLoading)
         assert(latest.periodicEnabled)
     }
@@ -71,9 +73,9 @@ class MainViewModelTest : KoinTest {
     fun `Stop periodic updates`() = runEventTest(
         viewModel,
         testScope,
-        listOf(MainViewModel.Event.StopPeriodicUpdates)
+        listOf(Event.StopPeriodicUpdates)
     ) { newStates ->
-        val latest: MainViewModel.State = newStates.last()
+        val latest: State = newStates.last()
         assert(!latest.isLoading)
         assert(!latest.periodicEnabled)
     }
@@ -83,11 +85,11 @@ class MainViewModelTest : KoinTest {
     fun `Send Location Update`() = runEventTest(
         viewModel,
         testScope,
-        listOf(MainViewModel.Event.LocationUpdated(Coordinates(50f, 60f)))
+        listOf(Event.LocationUpdated(Coordinates(50f, 60f)))
     ) { newStates ->
-        val latest: MainViewModel.State = newStates.last()
+        val latest: State = newStates.last()
         assert(!latest.isLoading)
-        assert(latest.refreshingData.getOrNull()?.coordinates?.lat == 50f)
-        assert(latest.refreshingData.getOrNull()?.coordinates?.lat == 60f)
+        assert(latest.location.lat == 50f)
+        assert(latest.location.lon == 60f)
     }
 }
