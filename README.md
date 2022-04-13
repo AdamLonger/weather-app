@@ -7,6 +7,12 @@ A demo weather information application using the openweathermap.org API.
 
 ---
 
+To run the application an OpenWeather APIKey must be added to the local.properties file:
+
+OPEN_WEATHER_KEY= <--KEY-->
+
+---
+
 Functional Requirements:
 * Get User Location
 * Request weather data from OpenWeatherMap API
@@ -42,4 +48,4 @@ Used Libraries:
 * LeakCanary
 * Detekt (Code Quality)
 * JUnit
-* KOtlin Coroutines Test
+* Kotlin Coroutines Test
